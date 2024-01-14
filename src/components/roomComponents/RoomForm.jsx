@@ -34,26 +34,25 @@ import axios from 'axios';
 // };
 
 
-const RoomForm = ({ addRoom, floorId }) => {
+
+// RoomForm.jsx
+
+
+const RoomForm = ({ onAddRoom }) => {
     const [roomName, setRoomName] = useState('');
-    const [capacity, setCapacity] = useState('');
+    const [roomCapacity, setRoomCapacity] = useState('');
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
-        // Create a new room object
-        const newRoom = {
-            id: Date.now(), // Temporary unique ID until backend integration
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // You'd also want to generate a unique ID for the new room
+        onAddRoom({
+            id: Date.now(), // simplistic unique ID generator
             name: roomName,
-            capacity: parseInt(capacity, 10) // Parse capacity to ensure it's an integer
-        };
-
-        // Add the new room to the specific floor
-        addRoom(newRoom, floorId);
-
-        // Reset form fields
+            capacity: roomCapacity,
+            // Add other room attributes here
+        });
         setRoomName('');
-        setCapacity('');
+        setRoomCapacity('');
     };
 
     return (
@@ -61,14 +60,14 @@ const RoomForm = ({ addRoom, floorId }) => {
             <input
                 type="text"
                 value={roomName}
-                onChange={e => setRoomName(e.target.value)}
+                onChange={(e) => setRoomName(e.target.value)}
                 placeholder="Room Name"
                 required
             />
             <input
                 type="number"
-                value={capacity}
-                onChange={e => setCapacity(e.target.value)}
+                value={roomCapacity}
+                onChange={(e) => setRoomCapacity(e.target.value)}
                 placeholder="Capacity"
                 required
             />
@@ -76,4 +75,6 @@ const RoomForm = ({ addRoom, floorId }) => {
         </form>
     );
 };
+
 export default RoomForm;
+
