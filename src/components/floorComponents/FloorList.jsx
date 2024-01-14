@@ -1,20 +1,33 @@
 // FloorList.jsx
-import React, { useState } from 'react';
-import sampleFloors from '../../samples/sampleFloors'; // Make sure the path to your sample data is correct
+import React, {useEffect, useState} from 'react';
 import FloorForm from '../floorComponents/FloorForm';
 import RoomList from '../roomComponents/RoomList';
+import { createFloor, getFloor, updateFloor, deleteFloor, createRoom, updateRoom, deleteRoom } from '../../samples/samples';
+``
 
 const FloorList = () => {
     // Since sampleFloors is a function, we need to call it to get the array
-    const [floors, setFloors] = useState(sampleFloors());
+    const [floors, setFloors] = useState([]);
     const [selectedFloor, setSelectedFloor] = useState(null);
+
+    useEffect(() => {
+        // Load floors from localStorage when the component mounts
+        const loadedFloors = getFloor();
+        if (loadedFloors) {
+            setFloors(loadedFloors);
+        }
+    }, []);
 
     const handleSelectFloor = (floorId) => {
         // Find the selected floor based on floorId
         const floor = floors.find(f => f.id === floorId);
         setSelectedFloor(floor);
     };
-
+    const handleCreateFloor = (newFloorData) => {
+        createFloor(newFloorData);
+        // Reload floors data to reflect the new floor
+        setFloors(getFloor());
+    };
     return (
         <div>
             <h2>Floors</h2>
@@ -27,7 +40,7 @@ const FloorList = () => {
                     )}
                 </div>
             ))}
-            <FloorForm setFloors={setFloors} />
+            <FloorForm onCreateFloor={setFloors} />
         </div>
     );
 };

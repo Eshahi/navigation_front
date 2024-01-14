@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import {createFloor, getFloor} from "../../samples/samples";
 
 // const FloorForm = ({ setFloors }) => {
 //     const [floorNumber, setFloorNumber] = useState('');
@@ -41,16 +42,15 @@ const FloorForm = ({ setFloors }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        // Assuming IDs are generated automatically by the backend
-        // For the frontend, you can use a temporary ID or use the floor number
         const newFloor = {
-            id: Date.now(), // Temporary unique ID until backend integration
+            id: Date.now(), // Temporary unique ID
             floor_number: parseInt(floorNumber),
             description: description,
             rooms: [] // New floors start with no rooms
         };
 
-        setFloors(floors => [...floors, newFloor]);
+        createFloor(newFloor); // Save new floor to localStorage
+        setFloors(getFloor()); // Update state with the new floors list
 
         // Reset form fields
         setFloorNumber('');

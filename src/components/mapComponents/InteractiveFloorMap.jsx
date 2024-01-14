@@ -22,6 +22,14 @@ const InteractiveFloorMap = ({ rooms, setRooms }) => {
         }
     };
 
+    const addRoom = (room) => {
+        setRooms(prevRooms => [
+            ...prevRooms,
+            room
+        ]);
+
+        setNewRoom(null);
+    }
     const handleRoomClick = (room) => {
         setSelectedRoom(room); // Set the clicked room as the selected room
         // Open a modal or form to edit the room details
@@ -99,7 +107,7 @@ const InteractiveFloorMap = ({ rooms, setRooms }) => {
                 </Layer>
             </Stage>
             {newRoom && (
-                <button onClick={addRoom}>
+                <button  onClick={() => addRoom(newRoom)}>
                     Confirm Room Position
                 </button>
             )}
