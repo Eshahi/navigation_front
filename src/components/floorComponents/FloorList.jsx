@@ -2,8 +2,8 @@
 import React, {useEffect, useState} from 'react';
 import FloorForm from '../floorComponents/FloorForm';
 import RoomList from '../roomComponents/RoomList';
-import { createFloor, getFloor, updateFloor, deleteFloor, createRoom, updateRoom, deleteRoom } from '../../samples/samples';
-``
+import {  getFloor, updateFloor, deleteFloor, createRoom, updateRoom, deleteRoom } from '../../samples/samples';
+
 
 const FloorList = () => {
     // Since sampleFloors is a function, we need to call it to get the array
@@ -23,11 +23,7 @@ const FloorList = () => {
         const floor = floors.find(f => f.id === floorId);
         setSelectedFloor(floor);
     };
-    const handleCreateFloor = (newFloorData) => {
-        createFloor(newFloorData);
-        // Reload floors data to reflect the new floor
-        setFloors(getFloor());
-    };
+
     return (
         <div>
             <h2>Floors</h2>

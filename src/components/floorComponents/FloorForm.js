@@ -35,7 +35,7 @@ import {createFloor, getFloor} from "../../samples/samples";
 //     );
 // };
 
-const FloorForm = ({ setFloors }) => {
+const FloorForm = ({onAddFloor}) => {
     const [floorNumber, setFloorNumber] = useState('');
     const [description, setDescription] = useState('');
 
@@ -49,8 +49,8 @@ const FloorForm = ({ setFloors }) => {
             rooms: [] // New floors start with no rooms
         };
 
-        createFloor(newFloor); // Save new floor to localStorage
-        setFloors(getFloor()); // Update state with the new floors list
+
+        onAddFloor(newFloor);
 
         // Reset form fields
         setFloorNumber('');

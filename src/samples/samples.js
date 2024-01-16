@@ -14,6 +14,10 @@ function getFloor(id) {
     return floors.find(f => f.id === id);
 }
 
+function getFloors() {
+    return floors;
+}
+
 function updateFloor(updatedFloor) {
     const index = floors.findIndex(f => f.id === updatedFloor.id);
     floors[index] = {...floors[index], ...updatedFloor};
@@ -47,6 +51,9 @@ function deleteRoom(floorId, roomId) {
     saveToLocalStorage();
 }
 
+function getRooms(floorId) {
+    return getFloor(floorId).rooms;
+}
 // Persist updated data to local storage
 function saveToLocalStorage() {
     localStorage.setItem('floors', JSON.stringify(floors));
@@ -60,5 +67,7 @@ module.exports = {
     deleteFloor,
     createRoom,
     updateRoom,
-    deleteRoom
+    deleteRoom,
+    getFloors,
+    getRooms
 };

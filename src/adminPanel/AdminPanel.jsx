@@ -1,101 +1,140 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import InteractiveFloorMap from '../components/mapComponents/InteractiveFloorMap';
 import RoomForm from '../components/roomComponents/RoomForm';
-import { createFloor, getFloor, updateFloor, deleteFloor, createRoom, updateRoom, deleteRoom } from '../samples/samples';
-import RoomDetailsModal from "../components/roomComponents/RoomEditModal";
-import FloorForm from "../components/floorComponents/FloorForm";
-
-
-//
-// const sampleFloors = [
-//     {
-//         id: 1,
-//         floor_number: 1,
-//         description: "First floor with conference rooms and lobby",
-//         rooms: [
-//             { id: 101, name: "Conference Room A", capacity: 12, x: 100, y: 100, width: 150, height: 100 },
-//             { id: 102, name: "Lobby", x: 300, y: 100, width: 200, height: 150 },
-//             // Add more rooms with x, y, width, and height properties
-//         ],
-//     },
-//     {
-//         id: 2,
-//         floor_number: 2,
-//         description: "Second floor with offices",
-//         rooms: [
-//             { id: 201, name: "Office 201", capacity: 2, x: 100, y: 300, width: 150, height: 100 },
-//             { id: 202, name: "Office 202", capacity: 2, x: 300, y: 300, width: 200, height: 150 },
-//             // Add more rooms with x, y, width, and height properties
-//         ],
-//     },
-// ]
-
+import RoomDetailsModal from '../components/roomComponents/RoomEditModal';
+import FloorForm from '../components/floorComponents/FloorForm';
+import {
+    createFloor,
+    getFloors,
+    updateFloor,
+    deleteFloor,
+    createRoom,
+    updateRoom,
+    deleteRoom,
+    getRooms
+} from '../samples/samples';
 
 const AdminPanel = () => {
     const [floors, setFloors] = useState([]);
     const [selectedFloorId, setSelectedFloorId] = useState(null);
-    const [selectedRoom, setSelectedRoom] = useState(null); // State for the room being edited
-    const [showModal, setShowModal] = useState(false); // State to control modal visibility
+    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [editRooms, setEditRooms] = useState(false);
+    const [currentRooms, setCurrentRooms] = useState([]);
 
     useEffect(() => {
-        // Load floors from localStorage when the component mounts
-        const loadedFloors = getFloor();
-        if (loadedFloors && loadedFloors.length > 0) {
-            setFloors(loadedFloors);
-            setSelectedFloorId(loadedFloors[0].id); // Set the first floor as selected by default
+        const loadedFloors = getFloors();
+        setFloors(loadedFloors);
+        if (loadedFloors.length > 0) {
+            setSelectedFloorId(loadedFloors[0].id);
+            setCurrentRooms(loadedFloors[0].rooms);
         }
     }, []);
 
+    useEffect(() => {
+        const selectedFloor = floors.find(floor => floor.id === selectedFloorId);
+        if (selectedFloor) {
+            setCurrentRooms(selectedFloor.rooms);
+        }
+    }, [selectedFloorId, floors]);
+
     const handleSelectFloor = (event) => {
         setSelectedFloorId(Number(event.target.value));
+        setEditRooms(false);
+    };
+
+    const handleAddFloor = (newFloor) => {
+        createFloor(newFloor);
+        const updatedFloors = getFloors();
+        setFloors(updatedFloors);
+        setSelectedFloorId(newFloor.id);
+    };
+
+    const handleEditRooms = () => {
+        setEditRooms(!editRooms);
     };
 
     const handleAddRoom = (newRoom) => {
-        createRoom(selectedFloorId, { ...newRoom, id: Math.random().toString(36).substr(2, 9) });
-        // Reload the floors data to reflect the new room
-        setFloors(getFloor());
+        if (selectedFloorId) {
+            createRoom(selectedFloorId, {...newRoom, id: Date.now()}
+        )
+            console.log(getRooms(selectedFloorId))
+
+            ;
+            const updatedFloors = getFloors();
+            setFloors(updatedFloors);
+            // Update the currentRooms state to reflect the new room addition
+            const updatedFloor = updatedFloors.find(floor => floor.id === selectedFloorId);
+            if (updatedFloor) {
+                setCurrentRooms(updatedFloor.rooms);
+            }
+        }
     };
 
-    const handleRoomClick = (roomId) => {
-        console.log('Room clicked:', roomId);
-        const room = selectedFloor.rooms.find(room => room.id === roomId);
+    const handleRoomSelect = (room) => {
         setSelectedRoom(room);
-        setShowModal(true);    };
-    const handleUpdateRoom = (updatedRoomData) => {
-        updateRoom(selectedFloorId, updatedRoomData);
-        setFloors(getFloor());
-        setShowModal(false);
+        setShowModal(true);
+    };
+
+    const handleUpdateRoom = (updatedRoom) => {
+        if (selectedFloorId) {
+            updateRoom(selectedFloorId, updatedRoom);
+            const updatedFloors = getFloors();
+            setFloors(updatedFloors);
+
+            // Update the currentRooms state to reflect the room update
+            const updatedFloor = updatedFloors.find(floor => floor.id === selectedFloorId);
+            if (updatedFloor) {
+                setCurrentRooms(updatedFloor.rooms);
+            }
+            setShowModal(false);
+        }
     };
 
     const handleDeleteRoom = (roomId) => {
-        deleteRoom(selectedFloorId, roomId);
-        setFloors(getFloor());
-        setShowModal(false);
+        if (selectedFloorId) {
+            deleteRoom(selectedFloorId, roomId);
+            const updatedFloors = getFloors();
+            setFloors(updatedFloors);
+
+            // Update the currentRooms state to reflect the room deletion
+            const updatedFloor = updatedFloors.find(floor => floor.id === selectedFloorId);
+            if (updatedFloor) {
+                setCurrentRooms(updatedFloor.rooms);
+            }
+        }
     };
 
     const handleCloseModal = () => {
         setShowModal(false);
     };
 
-    const selectedFloor = floors.find((floor) => floor.id === selectedFloorId);
+    const selectedFloor = floors.find(floor => floor.id === selectedFloorId);
 
     return (
         <div>
             <select onChange={handleSelectFloor} value={selectedFloorId || ''}>
-                {floors.map((floor) => (
-                    <option key={floor.id} value={floor.id}>
-                        {floor.description}
-                    </option>
+                {floors.map(floor => (
+                    <option key={floor.id} value={floor.id}>{floor.description}</option>
                 ))}
             </select>
+            <FloorForm onAddFloor={handleAddFloor}/>
+
             {selectedFloor && (
                 <>
-                    <InteractiveFloorMap
-                        rooms={selectedFloor.rooms}
-                        onRoomClick={handleRoomClick}
-                    />
-                    <FloorForm setFloors={setFloors}  />
-                    <RoomForm onAddRoom={handleAddRoom} />
+                    <button onClick={handleEditRooms}>
+                        {editRooms ? 'Stop Editing Rooms' : 'Edit Rooms'}
+                    </button>
+                    {editRooms && (
+                        <>
+                            <RoomForm onAddRoom={handleAddRoom}/>
+                            <InteractiveFloorMap
+                                rooms={currentRooms}
+                                onRoomSelect={handleRoomSelect}
+                            />
+
+                        </>
+                    )}
                     {showModal && selectedRoom && (
                         <RoomDetailsModal
                             room={selectedRoom}
@@ -109,5 +148,4 @@ const AdminPanel = () => {
         </div>
     );
 };
-
 export default AdminPanel;
