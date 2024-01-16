@@ -21,6 +21,7 @@ const AdminPanel = () => {
     const [showModal, setShowModal] = useState(false);
     const [editRooms, setEditRooms] = useState(false);
     const [currentRooms, setCurrentRooms] = useState([]);
+    const [newRoomToAdd, setNewRoomToAdd] = useState(null);
 
     useEffect(() => {
         const loadedFloors = getFloors();
@@ -37,6 +38,14 @@ const AdminPanel = () => {
             setCurrentRooms(selectedFloor.rooms);
         }
     }, [selectedFloorId, floors]);
+
+    useEffect(() => {
+        if (newRoomToAdd) {
+            createRoom(selectedFloorId, newRoomToAdd);
+            setCurrentRooms(prevRooms => [...prevRooms, newRoomToAdd]);
+            setNewRoomToAdd(null); // Reset new room to be added
+        }
+    }, [newRoomToAdd, selectedFloorId]);
 
     const handleSelectFloor = (event) => {
         setSelectedFloorId(Number(event.target.value));
@@ -56,20 +65,12 @@ const AdminPanel = () => {
 
     const handleAddRoom = (newRoom) => {
         if (selectedFloorId) {
-            createRoom(selectedFloorId, {...newRoom, id: Date.now()}
-        )
-            console.log(getRooms(selectedFloorId))
-
-            ;
-            const updatedFloors = getFloors();
-            setFloors(updatedFloors);
-            // Update the currentRooms state to reflect the new room addition
-            const updatedFloor = updatedFloors.find(floor => floor.id === selectedFloorId);
-            if (updatedFloor) {
-                setCurrentRooms(updatedFloor.rooms);
-            }
+            const newRoomWithId = {...newRoom, id: Date.now()};
+            setNewRoomToAdd(newRoomWithId); // Set new room to be added
         }
     };
+
+
 
     const handleRoomSelect = (room) => {
         setSelectedRoom(room);

@@ -49,7 +49,13 @@ const RoomForm = ({ onAddRoom }) => {
             id: Date.now(), // simplistic unique ID generator
             name: roomName,
             capacity: roomCapacity,
-            // Add other room attributes here
+            x: 50, // Default x-coordinate
+            y: 50, // Default y-coordinate
+            width: 100, // Default width
+            height: 100, // Default height
+
+
+
         });
         setRoomName('');
         setRoomCapacity('');

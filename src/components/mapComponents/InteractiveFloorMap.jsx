@@ -6,6 +6,7 @@ const InteractiveFloorMap = ({ rooms, onRoomSelect, onMapClick }) => {
         <>
             <Stage width={window.innerWidth} height={window.innerHeight} onClick={onMapClick}>
                 <Layer>
+                    {rooms.map((room)=> (console.log(room.x)))}
                     {rooms.map((room) => (
                         <React.Fragment key={room.id}>
                             <Rect
