@@ -1,6 +1,6 @@
 // FloorList.jsx
 import React, {useEffect, useState} from 'react';
-import FloorForm from '../floorComponents/FloorForm';
+import FloorForm from './FloorForm';
 import RoomList from '../roomComponents/RoomList';
 import {  getFloor, updateFloor, deleteFloor, createRoom, updateRoom, deleteRoom } from '../../samples/samples';
 

@@ -58,7 +58,7 @@ const FloorForm = ({onAddFloor}) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form  className='"w-96 mx-auto p-8  rounded-box' onSubmit={handleSubmit}>
             <input
                 type="number"
                 value={floorNumber}
@@ -72,7 +72,7 @@ const FloorForm = ({onAddFloor}) => {
                 onChange={e => setDescription(e.target.value)}
                 placeholder="Description"
                 required />
-            <button type="submit">Add Floor</button>
+            <button className='btn-primary bg-primary rounded-btn p-1' type="submit">Add Floor</button>
         </form>
     );
 };

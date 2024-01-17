@@ -60,27 +60,45 @@ const RoomForm = ({ onAddRoom }) => {
         setRoomName('');
         setRoomCapacity('');
     };
-
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                value={roomName}
-                onChange={(e) => setRoomName(e.target.value)}
-                placeholder="Room Name"
-                required
-            />
-            <input
-                type="number"
-                value={roomCapacity}
-                onChange={(e) => setRoomCapacity(e.target.value)}
-                placeholder="Capacity"
-                required
-            />
-            <button type="submit">Add Room</button>
+        <form
+            className="w-96 mx-auto p-8 bg-base-200 rounded-box"
+            onSubmit={handleSubmit}
+        >
+
+            <div className="form-control">
+                <input
+                    type="text"
+                    className="input input-bordered"
+                    value={roomName}
+                    onChange={(e) => setRoomName(e.target.value)}
+                    placeholder="Room Name"
+                    required
+                />
+            </div>
+
+            <div className="form-control">
+                <input
+                    type="number"
+                    className="input input-bordered"
+                    value={roomCapacity}
+                    onChange={(e) => setRoomCapacity(e.target.value)}
+                    placeholder="Capacity"
+                    required
+                />
+            </div>
+
+            <div className="form-control mt-6">
+                <button className="btn btn-primary" type="submit">
+                    Add Room
+                </button>
+            </div>
+
         </form>
     );
 };
+
+
 
 export default RoomForm;
 

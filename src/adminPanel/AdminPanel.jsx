@@ -18,10 +18,10 @@ const AdminPanel = () => {
     const [floors, setFloors] = useState([]);
     const [selectedFloorId, setSelectedFloorId] = useState(null);
     const [selectedRoom, setSelectedRoom] = useState(null);
-    const [showModal, setShowModal] = useState(false);
     const [editRooms, setEditRooms] = useState(false);
     const [currentRooms, setCurrentRooms] = useState([]);
     const [newRoomToAdd, setNewRoomToAdd] = useState(null);
+    const [showModal,setShowModal] = useState(false);
 
     useEffect(() => {
         const loadedFloors = getFloors();
@@ -47,9 +47,14 @@ const AdminPanel = () => {
         }
     }, [newRoomToAdd, selectedFloorId]);
 
-    const handleSelectFloor = (event) => {
-        setSelectedFloorId(Number(event.target.value));
-        setEditRooms(false);
+    const handleSelectFloor = (floorId) => {
+        setSelectedFloorId(floorId);
+
+        const selectedFloor = floors.find(f => f.id === floorId);
+
+        setCurrentRooms(selectedFloor.rooms);
+
+
     };
 
     const handleAddFloor = (newFloor) => {
@@ -75,6 +80,8 @@ const AdminPanel = () => {
     const handleRoomSelect = (room) => {
         setSelectedRoom(room);
         setShowModal(true);
+        console.log('Room selected:', room); // This should log when a room is clicked
+
     };
 
     const handleUpdateRoom = (updatedRoom) => {
@@ -88,7 +95,8 @@ const AdminPanel = () => {
             if (updatedFloor) {
                 setCurrentRooms(updatedFloor.rooms);
             }
-            setShowModal(false);
+                    setShowModal(false);
+
         }
     };
 
@@ -109,44 +117,82 @@ const AdminPanel = () => {
     const handleCloseModal = () => {
         setShowModal(false);
     };
+    const getSelectedFloorDescription = () => {
+        const selectedFloor = floors.find(floor => floor.id === selectedFloorId);
+        return selectedFloor ? selectedFloor.description : 'Select Floor';
+    };
 
     const selectedFloor = floors.find(floor => floor.id === selectedFloorId);
 
     return (
-        <div>
-            <select onChange={handleSelectFloor} value={selectedFloorId || ''}>
-                {floors.map(floor => (
-                    <option key={floor.id} value={floor.id}>{floor.description}</option>
-                ))}
-            </select>
-            <FloorForm onAddFloor={handleAddFloor}/>
+        <>
+            <div className="container mx-auto max-w-7xl p-4">
 
-            {selectedFloor && (
-                <>
-                    <button onClick={handleEditRooms}>
-                        {editRooms ? 'Stop Editing Rooms' : 'Edit Rooms'}
-                    </button>
-                    {editRooms && (
-                        <>
-                            <RoomForm onAddRoom={handleAddRoom}/>
-                            <InteractiveFloorMap
-                                rooms={currentRooms}
-                                onRoomSelect={handleRoomSelect}
+                {/* Dropdown & FloorForm */}
+                <div className="flex flex-col sm:flex-row sm:justify-between mb-5">
+                    <div className="flex items-center sm:mb-0 mb-4">
+                        <div className="dropdown dropdown-end">
+                            <label tabIndex="0" className="btn m-1">
+                                {  getSelectedFloorDescription()}
+                            </label>
+
+                            <ul tabIndex="0" className="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-52">
+                                {floors.map(floor => (
+                                    <li key={floor.id}>
+                                        <a onClick={() => handleSelectFloor(floor.id)}>{floor.description}</a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <FloorForm
+                            className="btn-primary btn ml-4"
+                            onAddFloor={handleAddFloor}
+                        />
+                    </div>
+
+                    {/* Edit Rooms Button */}
+                    {selectedFloor && (
+                        <button
+                            className="btn btn-primary btn-accent m-4"
+                            onClick={handleEditRooms}
+                        >
+                            {editRooms ? 'Stop Editing' : 'Edit Rooms'}
+                        </button>
+                    )}
+                </div>
+
+                {/* Room Form & Map */}
+                {editRooms && selectedFloor && (
+                    <div className="flex flex-row">
+
+                        <div className="flex flex-col w-96">
+
+                            <RoomForm
+                                onAddRoom={handleAddRoom}
                             />
 
-                        </>
-                    )}
-                    {showModal && selectedRoom && (
-                        <RoomDetailsModal
-                            room={selectedRoom}
-                            onSave={handleUpdateRoom}
-                            onDelete={handleDeleteRoom}
-                            onClose={handleCloseModal}
+                            {selectedRoom && showModal &&
+                                <RoomDetailsModal
+                                    room={selectedRoom}
+                                    onSave={handleUpdateRoom}
+                                    onClose={handleCloseModal}
+                                    onDelete={handleDeleteRoom}
+                                />
+                            }
+
+                        </div>
+
+                        <InteractiveFloorMap
+                            className="mx-8"
+                            rooms={currentRooms}
+                            onRoomSelect={handleRoomSelect}
                         />
-                    )}
-                </>
-            )}
-        </div>
-    );
+
+                    </div>
+                )}
+
+            </div>
+        </> );
 };
 export default AdminPanel;
