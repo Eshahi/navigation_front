@@ -13,6 +13,7 @@ import {
     deleteRoom,
     getRooms, clearStorage
 } from '../samples/samples';
+import FloorDropDown from "../components/floorComponents/FloorDropDown";
 
 const AdminPanel = () => {
     const [floors, setFloors] = useState([]);
@@ -132,19 +133,9 @@ const AdminPanel = () => {
                 {/* Dropdown & FloorForm */}
                 <div className="flex flex-col sm:flex-row sm:justify-between mb-5">
                     <div className="flex items-center sm:mb-0 mb-4">
-                        <div className="dropdown dropdown-end">
-                            <label tabIndex="0" className="btn m-1">
-                                {  getSelectedFloorDescription()}
-                            </label>
-
-                            <ul tabIndex="0" className="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-52">
-                                {floors.map(floor => (
-                                    <li key={floor.id}>
-                                        <a onClick={() => handleSelectFloor(floor.id)}>{floor.description}</a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                        <FloorDropDown getSelectedFloorDescription={getSelectedFloorDescription}
+                                        handleSelectFloor={handleSelectFloor}
+                                        floors={floors}/>
 
                         <FloorForm
                             className="btn-primary btn ml-4"
@@ -188,6 +179,7 @@ const AdminPanel = () => {
                             className="mx-8"
                             rooms={currentRooms}
                             onRoomSelect={handleRoomSelect}
+                            isAdmin={true}
                         />
 
                     </div>

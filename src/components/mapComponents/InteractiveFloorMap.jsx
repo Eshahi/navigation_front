@@ -1,30 +1,27 @@
 import React from "react";
 import { Stage, Layer, Rect, Text, Group } from "react-konva";
 
-const InteractiveFloorMap = ({ rooms, onRoomSelect, onMapClick }) => {
+const InteractiveFloorMap = ({ rooms, onRoomSelect, onMapClick, isAdmin }) => {
     return (
-
         <Stage width={window.innerWidth} height={window.innerHeight} onClick={onMapClick}>
             <Layer>
                 {rooms.map((room) => (
-
                     <Group
-
                         key={room.id}
                         x={room.x}
                         y={room.y}
-                        draggable
+                        draggable={isAdmin} // Draggable only if isAdmin is true
                         onDragEnd={(e) => {
-                            // Call onRoomSelect with the updated room position
-                            onRoomSelect({
-                                ...room,
-                                x: e.target.x(),
-                                y: e.target.y()
-                            });
+                            if (isAdmin) {
+                                // Call onRoomSelect with the updated room position only if isAdmin
+                                onRoomSelect({
+                                    ...room,
+                                    x: e.target.x(),
+                                    y: e.target.y()
+                                });
+                            }
                         }}
                     >
-                        {console.log("is room elevator", room.isElevator)}
-
                         <Rect
                             width={room.width}
                             height={room.height}

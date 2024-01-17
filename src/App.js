@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import AdminPanel from './adminPanel/AdminPanel';
-import Home from './components/mapComponents/StatcFloorPlan'; // Assume you have a Home component
+import Home from './Home'; // Assume you have a Home component
 
 
 const App = () => {
