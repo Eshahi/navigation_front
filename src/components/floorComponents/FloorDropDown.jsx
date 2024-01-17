@@ -3,7 +3,7 @@ import React from "react";
 
 const FloorDropDown = ({getSelectedFloorDescription,handleSelectFloor,floors}) => {
     return (
-        <div className="dropdown dropdown-end">
+        <div className="dropdown dropdown-left">
             <label tabIndex="0" className="btn m-1">
                 {  getSelectedFloorDescription()}
             </label>
