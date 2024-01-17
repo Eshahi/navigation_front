@@ -58,6 +58,10 @@ function getRooms(floorId) {
 function saveToLocalStorage() {
     localStorage.setItem('floors', JSON.stringify(floors));
 }
+function clearStorage() {
+    localStorage.clear();
+
+}
 
 // Export module functions
 module.exports = {
@@ -69,5 +73,5 @@ module.exports = {
     updateRoom,
     deleteRoom,
     getFloors,
-    getRooms
+    getRooms,clearStorage
 };

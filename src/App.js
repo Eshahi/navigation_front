@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import AdminPanel from './adminPanel/AdminPanel';
 import Home from './components/mapComponents/StatcFloorPlan'; // Assume you have a Home component
 
+
 const App = () => {
     return (
         <Router>

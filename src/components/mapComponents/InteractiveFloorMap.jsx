@@ -3,10 +3,13 @@ import { Stage, Layer, Rect, Text, Group } from "react-konva";
 
 const InteractiveFloorMap = ({ rooms, onRoomSelect, onMapClick }) => {
     return (
+
         <Stage width={window.innerWidth} height={window.innerHeight} onClick={onMapClick}>
             <Layer>
                 {rooms.map((room) => (
+
                     <Group
+
                         key={room.id}
                         x={room.x}
                         y={room.y}
@@ -20,10 +23,12 @@ const InteractiveFloorMap = ({ rooms, onRoomSelect, onMapClick }) => {
                             });
                         }}
                     >
+                        {console.log("is room elevator", room.isElevator)}
+
                         <Rect
                             width={room.width}
                             height={room.height}
-                            fill="#64b5f6"
+                            fill={room.isElevator ? "#000000" : "#64b5f6"}
                             stroke="#0d47a1"
                             strokeWidth={1}
                         />

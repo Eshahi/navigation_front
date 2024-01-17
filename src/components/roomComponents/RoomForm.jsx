@@ -41,24 +41,25 @@ import axios from 'axios';
 const RoomForm = ({ onAddRoom }) => {
     const [roomName, setRoomName] = useState('');
     const [roomCapacity, setRoomCapacity] = useState('');
+    const [isElevator, setIsElevator] = useState(false);
+
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // You'd also want to generate a unique ID for the new room
         onAddRoom({
-            id: Date.now(), // simplistic unique ID generator
+            id: Date.now(),
             name: roomName,
             capacity: roomCapacity,
-            x: 50, // Default x-coordinate
-            y: 50, // Default y-coordinate
-            width: 100, // Default width
-            height: 100, // Default height
-
-
-
+            x: 50,  // Default X position
+            y: 50,  // Default Y position
+            width: 100,  // Default width
+            height: 100,  // Default height
+            isElevator: isElevator,
         });
         setRoomName('');
         setRoomCapacity('');
+        setIsElevator(false);
     };
     return (
         <form
@@ -88,16 +89,28 @@ const RoomForm = ({ onAddRoom }) => {
                 />
             </div>
 
+            <div className="form-control">
+                <label className="label cursor-pointer">
+                    <span className="label-text mr-2">Is Elevator?</span>
+                    <input
+                        type="checkbox"
+                        checked={isElevator}
+                        onChange={(e) => setIsElevator(e.target.checked)}
+                        className="toggle toggle-accent"
+                    />
+                </label>
+            </div>
+
             <div className="form-control mt-6">
                 <button className="btn btn-primary" type="submit">
                     Add Room
                 </button>
             </div>
 
+
         </form>
     );
 };
-
 
 
 export default RoomForm;

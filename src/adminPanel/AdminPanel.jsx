@@ -11,7 +11,7 @@ import {
     createRoom,
     updateRoom,
     deleteRoom,
-    getRooms
+    getRooms, clearStorage
 } from '../samples/samples';
 
 const AdminPanel = () => {
@@ -126,6 +126,7 @@ const AdminPanel = () => {
 
     return (
         <>
+
             <div className="container mx-auto max-w-7xl p-4">
 
                 {/* Dropdown & FloorForm */}
